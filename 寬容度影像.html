@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寬容度影像｜精選作品集</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Noto+Serif+TC:wght@300;400;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #181818;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8e4dc;
+    --muted: #6a6660;
+    --accent: #c8a96e;
+    --accent2: #8fb89a;
+    --tag-mv: #c8a96e;
+    --tag-anim: #a78bce;
+    --tag-ad: #e07b6b;
+    --tag-csr: #8fb89a;
+    --tag-local: #6aabcc;
+    --tag-event: #d4a3a3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    padding: 80px 60px 60px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    overflow: hidden;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(200,169,110,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-left {}
+
+  .brand-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 6vw, 80px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  h1 span {
+    color: var(--accent);
+  }
+
+  .header-desc {
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 360px;
+    line-height: 1.8;
+    font-family: 'Noto Serif TC', serif;
+  }
+
+  .header-stat {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* NAV FILTER */
+  nav {
+    padding: 28px 60px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(20px);
+    z-index: 100;
+  }
+
+  .filter-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-right: 8px;
+  }
+
+  .filter-btn {
+    padding: 7px 16px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Noto Serif TC', serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.05em;
+  }
+
+  .filter-btn:hover {
+    border-color: rgba(255,255,255,0.2);
+    color: var(--text);
+  }
+
+  .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0a0a0a;
+    font-weight: 600;
+  }
+
+  /* GRID */
+  main {
+    padding: 48px 60px 80px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 28px;
+    margin-top: 52px;
+  }
+
+  .section-header:first-child {
+    margin-top: 0;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+
+  .section-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--bg2);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+    border: 1px solid var(--border);
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,0.15);
+    z-index: 10;
+  }
+
+  .card:hover .card-overlay {
+    opacity: 1;
+  }
+
+  .card:hover .thumb img {
+    transform: scale(1.05);
+  }
+
+  .thumb {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: var(--bg3);
+  }
+
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+    filter: brightness(0.85);
+  }
+
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .play-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .play-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: white;
+    margin-left: 3px;
+  }
+
+  .card-body {
+    padding: 16px 18px 18px;
+  }
+
+  .card-cat {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 1px;
+    margin-bottom: 10px;
+  }
+
+  .cat-mv { background: rgba(200,169,110,0.15); color: var(--tag-mv); }
+  .cat-anim { background: rgba(167,139,206,0.15); color: var(--tag-anim); }
+  .cat-ad { background: rgba(224,123,107,0.15); color: var(--tag-ad); }
+  .cat-csr { background: rgba(143,184,154,0.15); color: var(--tag-csr); }
+  .cat-local { background: rgba(106,171,204,0.15); color: var(--tag-local); }
+  .cat-event { background: rgba(212,163,163,0.15); color: var(--tag-event); }
+
+  .card-title {
+    font-size: 13.5px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+
+  .card-title-muted {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  /* FB card placeholder */
+  .fb-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--bg3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .fb-thumb svg { opacity: 0.25; }
+  .fb-thumb span { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--muted);
+  }
+
+  .footer-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* HIDDEN state */
+  .card.hidden { display: none; }
+  .section-group.hidden { display: none; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @media (max-width: 768px) {
+    header { padding: 48px 24px 40px; flex-direction: column; align-items: flex-start; }
+    nav { padding: 20px 24px; }
+    main { padding: 32px 24px 60px; }
+    footer { padding: 28px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    .header-stat { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="brand-label">Video Production Portfolio</div>
+    <h1>寬容度影像<br><span>精選作品集</span></h1>
+    <p class="header-desc">從品牌故事到地方創生，以影像紀錄每一個值得被看見的瞬間。</p>
+  </div>
+  <div class="header-stat">
+    <div class="stat-num" id="totalCount">57</div>
+    <div class="stat-label">Works</div>
+  </div>
+</header>
+
+<nav>
+  <span class="filter-label">類別</span>
+  <button class="filter-btn active" data-filter="all">全部</button>
+  <button class="filter-btn" data-filter="mv">MV</button>
+  <button class="filter-btn" data-filter="anim">動畫影片</button>
+  <button class="filter-btn" data-filter="ad">商業廣告</button>
+  <button class="filter-btn" data-filter="csr">CSR / ESG 永續</button>
+  <button class="filter-btn" data-filter="local">地方創生 / 教育</button>
+  <button class="filter-btn" data-filter="event">活動紀錄</button>
+</nav>
+
+<main id="main"></main>
+
+<footer>
+  <div class="footer-brand">寬容度影像</div>
+  <div class="footer-note">© 2025 All Rights Reserved</div>
+</footer>
+
+<script>
+const data = [
+  {
+    cat: 'mv', catLabel: 'MV', catClass: 'cat-mv', sectionTitle: 'Music Video',
+    items: [
+      { title: '拾Hak時Hug｜邱淑蟬', sub: '《共下》Music Video', url: 'https://www.youtube.com/watch?v=pWJ16QbiBXE', vid: 'pWJ16QbiBXE' },
+      { title: '拾Hak時Hug｜葉穎 Leaf Yeh', sub: '《慢慢个》Music Video', url: 'https://www.youtube.com/watch?v=u-ntRfVsK5A', vid: 'u-ntRfVsK5A' },
+      { title: '拾Hak時Hug｜柔米', sub: '《zang loiˇ liau 再來玩》Music Video', url: 'https://www.youtube.com/watch?v=fLu21E_hyYc', vid: 'fLu21E_hyYc' },
+      { title: '拾Hak時Hug｜魏士翔', sub: '《Born to be free》Music Video', url: 'https://www.youtube.com/watch?v=UJR39eJEDME', vid: 'UJR39eJEDME' },
+      { title: '拾Hak時Hug｜趙倩筠', sub: '《頭擺个火車頭》Music Video', url: 'https://www.youtube.com/watch?v=tibfwgUgP6E', vid: 'tibfwgUgP6E' },
+      { title: '拾Hak時Hug｜黃鎮炘', sub: '《來尞東勢》Music Video', url: 'https://www.youtube.com/watch?v=YlwexC7LWWA', vid: 'YlwexC7LWWA' },
+      { title: '拾Hak時Hug｜曾仲瑋', sub: '《好天氣》Music Video', url: 'https://www.youtube.com/watch?v=ZCdgOfM8UCU', vid: 'ZCdgOfM8UCU' },
+      { title: '拾Hak時Hug｜邱廉欽 Kim', sub: '《來去尞》Music Video', url: 'https://www.youtube.com/watch?v=q7fAKf5iJzs', vid: 'q7fAKf5iJzs' },
+    ]
+  },
+  {
+    cat: 'anim', catLabel: '動畫影片', catClass: 'cat-anim', sectionTitle: '動畫影片',
+    items: [
+      { title: '芎林貢米的故事', sub: '動畫短片', url: 'https://www.youtube.com/watch?v=w9KqOQ5dVCY', vid: 'w9KqOQ5dVCY' },
+    ]
+  },
+  {
+    cat: 'ad', catLabel: '商業廣告', catClass: 'cat-ad', sectionTitle: '商業廣告',
+    items: [
+      { title: '商業廣告 01', sub: '', url: 'https://www.facebook.com/share/v/1CPmALssFe/', vid: null },
+      { title: '商業廣告 02', sub: '', url: 'https://www.facebook.com/share/v/1Z3A3ggSzv/', vid: null },
+      { title: '商業廣告 03', sub: '', url: 'https://www.facebook.com/share/v/17e4g2PHYe/', vid: null },
+    ]
+  },
+  {
+    cat: 'csr', catLabel: 'CSR / ESG 永續', catClass: 'cat-csr', sectionTitle: 'CSR / ESG 永續',
+    items: [
+      { title: '《2025 夢想食驗事》夢想，正在閃耀✨', sub: '完整版', url: 'https://www.youtube.com/watch?v=8THEnZEranE', vid: '8THEnZEranE' },
+      { title: '《2025 夢想食驗事》夢想，正在閃耀', sub: '短版', url: 'https://www.youtube.com/watch?v=hUE4fyf2XwA', vid: 'hUE4fyf2XwA' },
+      { title: '《2025 夢想食驗事》神農百草-健康之「藥」', sub: '臺中教育大學附設實驗國民小學', url: 'https://www.youtube.com/watch?v=MV4xKCK0zdM', vid: 'MV4xKCK0zdM' },
+      { title: '《2025 夢想食驗事》長常食在地庚我減碳趣', sub: '桃園市長庚國民小學', url: 'https://www.youtube.com/watch?v=FQdxusTJvsY', vid: 'FQdxusTJvsY' },
+      { title: '《2025 夢想食驗事》我的「興」級茶料理', sub: '', url: 'https://www.youtube.com/watch?v=YG3_0S0TsC4', vid: 'YG3_0S0TsC4' },
+      { title: '《2025 夢想食驗事》圓圓滿滿-傳承蘇澳好味道', sub: '宜蘭縣蘇澳國民小學', url: 'https://www.youtube.com/watch?v=gLBk_2-i10o', vid: 'gLBk_2-i10o' },
+      { title: '《2025 夢想食驗事》食藻好健康', sub: '基隆市忠孝國小附設幼兒園', url: 'https://www.youtube.com/watch?v=SyRH8_yydEs', vid: 'SyRH8_yydEs' },
+      { title: '《2025 夢想食驗事》草仔粿的多重宇宙', sub: '新北市瓜山國民小學', url: 'https://www.youtube.com/watch?v=mmnINZSjJd0', vid: 'mmnINZSjJd0' },
+      { title: '《2025 夢想食驗事》芫荽～芳擱媠', sub: '彰化縣北斗國民小學', url: 'https://www.youtube.com/watch?v=dfQtWgVQcec', vid: 'dfQtWgVQcec' },
+      { title: '《2025 夢想食驗事》虱目魚的奇幻旅程', sub: '高雄市梓官國民小學', url: 'https://www.youtube.com/watch?v=IZq9zDZUgRE', vid: 'IZq9zDZUgRE' },
+      { title: '《2025 夢想食驗事》智食智選，健康向前', sub: '高雄市楠陽國民小學', url: 'https://www.youtube.com/watch?v=3uj15SpYvDk', vid: '3uj15SpYvDk' },
+      { title: '灃食良食脈動-夢想食驗事計畫', sub: '', url: 'https://www.youtube.com/watch?v=4VAEzQORY-4', vid: '4VAEzQORY-4' },
+      { title: '2024灃食夢想計畫典禮短片', sub: '夢想的實踐歷程', url: 'https://www.youtube.com/watch?v=fqmnu7XVQms', vid: 'fqmnu7XVQms' },
+      { title: '《灃食夢想計畫》竹科實中附設幼兒園', sub: '「艾」拉近我們的距離', url: 'https://www.youtube.com/watch?v=6v4aeBdXTKM', vid: '6v4aeBdXTKM' },
+      { title: '《灃食夢想計畫》嘉義和睦國小', sub: '萌的薯餅三色豆的突破之旅', url: 'https://www.youtube.com/watch?v=mck30uaSOd8', vid: 'mck30uaSOd8' },
+      { title: '《灃食夢想計畫》臺南大學附設實驗國小', sub: '在阿嬤的古早味加點科學', url: 'https://www.youtube.com/watch?v=1YGbDL8M4zQ', vid: '1YGbDL8M4zQ' },
+      { title: '《灃食夢想計畫》彰化南郭國小', sub: '作伙踅菜市仔', url: 'https://www.youtube.com/watch?v=rOPHmuxeFTU', vid: 'rOPHmuxeFTU' },
+      { title: '《灃食夢想計畫》臺中喀哩國小附設幼兒園', sub: '喀哩作夥與米相遇', url: 'https://www.youtube.com/watch?v=XNj0IRfgbDU', vid: 'XNj0IRfgbDU' },
+      { title: '《灃食夢想計畫》臺南月津國小附設幼兒園', sub: '「意」鳴「津」人', url: 'https://www.youtube.com/watch?v=rg0q6snmf-8', vid: 'rg0q6snmf-8' },
+      { title: '《灃食夢想計畫》桃園楊光非營利幼兒園', sub: '一起來嘗仙', url: 'https://www.youtube.com/watch?v=aoMK6CocPfg', vid: 'aoMK6CocPfg' },
+      { title: '2024灃食SUPER校廚大賽', sub: '料理魔術師', url: 'https://www.youtube.com/watch?v=-HEv9W5F_gs', vid: '-HEv9W5F_gs' },
+      { title: '《灃食夢想計畫》高雄吉東國小', sub: '最佳食客', url: 'https://www.youtube.com/watch?v=aqvb-pssTa0', vid: 'aqvb-pssTa0' },
+      { title: '《灃食夢想計畫》臺北永安國小', sub: '醜蔬果之美麗新視界', url: 'https://www.youtube.com/watch?v=ahpz7gql5R0', vid: 'ahpz7gql5R0' },
+      { title: '《灃食夢想計畫》基隆七堵國小', sub: '搶救剩食大作戰', url: 'https://www.youtube.com/watch?v=7KRiBy2ouI8', vid: '7KRiBy2ouI8' },
+      { title: '《灃食夢想計畫》宜蘭育英國小', sub: '南方澳與餐桌上的魚故事', url: 'https://www.youtube.com/watch?v=aabXN47iRmQ', vid: 'aabXN47iRmQ' },
+      { title: '【灃食日本食育參訪】你的家鄉味是什麼？', sub: '臺日廚藝交流', url: 'https://www.youtube.com/watch?v=wnScN-RPcKg', vid: 'wnScN-RPcKg' },
+      { title: '【灃食日本食育交流】一盤地產地消的咖哩飯', sub: '', url: 'https://www.youtube.com/watch?v=C8ct7tEqrU0', vid: 'C8ct7tEqrU0' },
+    ]
+  },
+  {
+    cat: 'local', catLabel: '地方創生 / 教育', catClass: 'cat-local', sectionTitle: '地方創生 / 教育',
+    items: [
+      { title: '2024好食好事食農創生計畫｜綠川青森', sub: '', url: 'https://www.youtube.com/watch?v=2z7kL92Y_EY', vid: '2z7kL92Y_EY' },
+      { title: '2024好食好事食農創生計畫｜可可沃莊園', sub: '', url: 'https://www.youtube.com/watch?v=FKqUxgUlBU8', vid: 'FKqUxgUlBU8' },
+      { title: '2024好食好事食農創生計畫｜九蝦行', sub: '', url: 'https://www.youtube.com/watch?v=IeSNvjuYKw4', vid: 'IeSNvjuYKw4' },
+      { title: '2024好食好事食農創生計畫｜拾捲。maki', sub: '', url: 'https://www.youtube.com/watch?v=3BB5Zl-bjLY', vid: '3BB5Zl-bjLY' },
+      { title: '2024好食好事食農創生計畫｜湯瑪斯茶葉聯盟', sub: '', url: 'https://www.youtube.com/watch?v=FFHD-Hqb6ik', vid: 'FFHD-Hqb6ik' },
+      { title: '2024好食好事食農創生計畫｜鰻好生活', sub: '', url: 'https://www.youtube.com/watch?v=XvTWirmVDgY', vid: 'XvTWirmVDgY' },
+      { title: '2024好食好事食農創生計畫｜長城食堂1981', sub: '', url: 'https://www.youtube.com/watch?v=uIMV9bDSvm0', vid: 'uIMV9bDSvm0' },
+      { title: '2024好食好事食農創生計畫｜阿瑋米香', sub: '', url: 'https://www.youtube.com/watch?v=TBSJ15-t4Yc', vid: 'TBSJ15-t4Yc' },
+      { title: '2023好食好事食農創生計畫｜雷打石', sub: '', url: 'https://www.youtube.com/watch?v=UhajjGobGkk', vid: 'UhajjGobGkk' },
+      { title: '2023好食好事食農創生計畫｜壹顆蜆（通利水產）', sub: '', url: 'https://www.youtube.com/watch?v=LOASO09yeQ0', vid: 'LOASO09yeQ0' },
+      { title: '2023好食好事食農創生計畫｜乙木羊', sub: '', url: 'https://www.youtube.com/watch?v=y57Q5FflCdE', vid: 'y57Q5FflCdE' },
+      { title: '2023好食好事食農創生計畫｜黃金蜂園', sub: '', url: 'https://www.youtube.com/watch?v=uitMOf-ThFI', vid: 'uitMOf-ThFI' },
+      { title: '2023好食好事食農創生計畫｜田野勤學', sub: '', url: 'https://www.youtube.com/watch?v=O2wcwcAB3fM', vid: 'O2wcwcAB3fM' },
+      { title: '2023好食好事食農創生計畫｜晨照溫室農場', sub: '', url: 'https://www.youtube.com/watch?v=WbIIUX77nNI', vid: 'WbIIUX77nNI' },
+    ]
+  },
+  {
+    cat: 'event', catLabel: '活動紀錄', catClass: 'cat-event', sectionTitle: '活動紀錄',
+    items: [
+      { title: '海海人生｜從市場到餐桌的食驗走讀', sub: '2025 灃食良食脈動', url: 'https://www.youtube.com/watch?v=Bc-NQsnkfao', vid: 'Bc-NQsnkfao' },
+      { title: '2025灃食一日食育營', sub: '從香草田到潮間帶', url: 'https://www.youtube.com/watch?v=vL_Q83BwK7k', vid: 'vL_Q83BwK7k' },
+      { title: '大同鋁業2024沖繩郵輪員工旅遊紀錄短片', sub: '', url: 'https://www.youtube.com/watch?v=bZ5OnA9dRHk', vid: 'bZ5OnA9dRHk' },
+      { title: '大同54市集紀錄短片', sub: '', url: 'https://www.youtube.com/watch?v=fH71mrXxoAI', vid: 'fH71mrXxoAI' },
+    ]
+  },
+];
+
+function ytThumb(vid) {
+  return `https://img.youtube.com/vi/${vid}/mqdefault.jpg`;
+}
+
+function buildCard(item, catClass, catLabel) {
+  const a = document.createElement('a');
+  a.className = 'card';
+  a.href = item.url;
+  a.target = '_blank';
+  a.rel = 'noopener';
+
+  let thumbHtml;
+  if (item.vid) {
+    thumbHtml = `
+      <div class="thumb">
+        <img src="${ytThumb(item.vid)}" alt="${item.title}" loading="lazy">
+        <div class="card-overlay">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+      </div>`;
+  } else {
+    thumbHtml = `
+      <div class="thumb fb-thumb">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        <span>Facebook Video</span>
+      </div>`;
+  }
+
+  a.innerHTML = `
+    ${thumbHtml}
+    <div class="card-body">
+      <span class="card-cat ${catClass}">${catLabel}</span>
+      <div class="card-title">${item.title}</div>
+      ${item.sub ? `<div class="card-title-muted">${item.sub}</div>` : ''}
+    </div>`;
+
+  return a;
+}
+
+function render(filter = 'all') {
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+
+  let totalVisible = 0;
+
+  data.forEach(section => {
+    if (filter !== 'all' && filter !== section.cat) return;
+
+    const group = document.createElement('div');
+    group.className = 'section-group';
+    group.dataset.cat = section.cat;
+
+    const header = document.createElement('div');
+    header.className = 'section-header';
+    header.innerHTML = `
+      <h2 class="section-title">${section.sectionTitle}</h2>
+      <span class="section-count">${section.items.length} works</span>
+      <div class="section-line"></div>`;
+    group.appendChild(header);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+
+    section.items.forEach((item, i) => {
+      const card = buildCard(item, section.catClass, section.catLabel);
+      card.style.animationDelay = `${i * 40}ms`;
+      grid.appendChild(card);
+    });
+
+    group.appendChild(grid);
+    main.appendChild(group);
+    totalVisible += section.items.length;
+  });
+
+  document.getElementById('totalCount').textContent = totalVisible;
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render(btn.dataset.filter);
+  });
+});
+
+render();
+</script>
+</body>
+</html>
